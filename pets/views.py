@@ -77,7 +77,11 @@ def editPet(request,id):
     return render(request, 'system/editPet.html', {'pet':pet, 'errors':errors , 'form':form})
 
 def petDelete(request, id):
-    Pet.objects.filter(id=id).delete()
+    if(pet.user_id != request.user.id):
+        errors['has_errors'] = 1
+        errors['error'].update({ 0 : 'Esse pet nao te pertence... Ainda.'})
+    else:
+        Pet.objects.filter(id=id).delete()
     return redirect('/system/pets/my')
 
 def adopted(request,id):
